@@ -1,6 +1,6 @@
 # Rust / Cargo
 /target/
-**/*.rs.bk
+**/target
 *.pdb
 Cargo.lock
 
@@ -30,7 +30,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-
+**/.next
 # Testing
 coverage/
 .nyc_output/
