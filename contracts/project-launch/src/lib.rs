@@ -1,7 +1,7 @@
 #![no_std]
 
 use soroban_sdk::{
-    contract, contracterror, contractimpl, contracttype, token::TokenClient, Address, Bytes, Env,
+    contract, contractimpl, contracttype, token::TokenClient, Address, Bytes, Env,
 };
 
 use shared::{
@@ -572,7 +572,7 @@ mod tests {
         token_admin_client.mint(&contributor, &50_0000000);
         client.contribute(&project_id, &contributor, &MIN_CONTRIBUTION);
 
-        let project = client.get_project(&project_id).unwrap();
+        let project = client.get_project(&project_id);
         assert_eq!(project.status, ProjectStatus::Active);
         assert!(!client.is_failure_processed(&project_id));
 
@@ -588,7 +588,7 @@ mod tests {
         assert!(result.is_ok());
         assert!(client.is_failure_processed(&project_id));
 
-        let project = client.get_project(&project_id).unwrap();
+        let project = client.get_project(&project_id);
         assert_eq!(project.status, ProjectStatus::Failed);
 
         // Try to mark as failed again - should fail
@@ -628,17 +628,18 @@ mod tests {
         );
 
         // Mint tokens and contribute full amount (meets goal)
-        token_admin_client.mint(&contributor, &MIN_FUNDING_GOAL + 100_0000000);
+        let mint_amount = MIN_FUNDING_GOAL + 100_0000000;
+        token_admin_client.mint(&contributor, &mint_amount);
         client.contribute(&project_id, &contributor, &MIN_FUNDING_GOAL);
 
         // Move past deadline
         env.ledger().set_timestamp(deadline + 1);
 
         // Mark project status
-        client.mark_project_failed(&project_id).unwrap();
+        client.mark_project_failed(&project_id);
 
         // Should be completed since goal was met
-        let project = client.get_project(&project_id).unwrap();
+        let project = client.get_project(&project_id);
         assert_eq!(project.status, ProjectStatus::Completed);
     }
 
@@ -682,10 +683,10 @@ mod tests {
 
         // Move past deadline and mark as failed
         env.ledger().set_timestamp(deadline + 1);
-        client.mark_project_failed(&project_id).unwrap();
+        client.mark_project_failed(&project_id);
 
         // Refund contributor
-        let refund_amount = client.refund_contributor(&project_id, &contributor).unwrap();
+        let refund_amount = client.refund_contributor(&project_id, &contributor);
         assert_eq!(refund_amount, MIN_CONTRIBUTION);
 
         // Verify tokens were returned
@@ -753,11 +754,11 @@ mod tests {
 
         // Move past deadline and mark as failed
         env.ledger().set_timestamp(deadline + 1);
-        client.mark_project_failed(&project_id).unwrap();
+        client.mark_project_failed(&project_id);
 
         // Refund both contributors
-        let refund1 = client.refund_contributor(&project_id, &contributor1).unwrap();
-        let refund2 = client.refund_contributor(&project_id, &contributor2).unwrap();
+        let refund1 = client.refund_contributor(&project_id, &contributor1);
+        let refund2 = client.refund_contributor(&project_id, &contributor2);
 
         assert_eq!(refund1, contrib1_amount);
         assert_eq!(refund2, contrib2_amount);
@@ -804,7 +805,7 @@ mod tests {
 
         // Move past deadline and mark as failed
         env.ledger().set_timestamp(deadline + 1);
-        client.mark_project_failed(&project_id).unwrap();
+        client.mark_project_failed(&project_id);
 
         // Try to refund someone with no contribution - should fail
         let result = client.try_refund_contributor(&project_id, &contributor);
