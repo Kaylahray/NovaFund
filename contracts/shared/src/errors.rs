@@ -51,6 +51,15 @@ pub enum Error {
     ProposalAlreadyExecuted = 602,
     QuorumNotReached = 603,
 
+    // Cross-chain bridge errors (700-799)
+    BridgePaused = 700,
+    ChainNotSupported = 701,
+    InvalidChain = 702,
+    BridgeTransactionFailed = 703,
+    InsufficientConfirmations = 704,
+    RelayerNotRegistered = 705,
+    InvalidBridgeOperation = 706,
+
     InvalidFundingGoal = 1000,
     InvalidDeadline = 1001,
     ProjectNotFound = 1002,

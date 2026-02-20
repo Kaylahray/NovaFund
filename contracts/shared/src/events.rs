@@ -48,3 +48,18 @@ pub const SUBSCRIPTION_PAUSED: Symbol = symbol_short!("sub_pause");
 pub const SUBSCRIPTION_RESUMED: Symbol = symbol_short!("sub_resum");
 pub const PAYMENT_FAILED: Symbol = symbol_short!("pay_fail");
 pub const SUBSCRIPTION_PAYMENT: Symbol = symbol_short!("deposit");
+
+// Cross-chain bridge events
+pub const BRIDGE_INITIALIZED: Symbol = symbol_short!("br_init");
+pub const SUPPORTED_CHAIN_ADDED: Symbol = symbol_short!("chain_add");
+pub const SUPPORTED_CHAIN_REMOVED: Symbol = symbol_short!("chain_rem");
+pub const ASSET_WRAPPED: Symbol = symbol_short!("wrap");
+pub const ASSET_UNWRAPPED: Symbol = symbol_short!("unwrap");
+pub const BRIDGE_DEPOSIT: Symbol = symbol_short!("br_dep");
+pub const BRIDGE_WITHDRAW: Symbol = symbol_short!("br_wdraw");
+pub const BRIDGE_PAUSED: Symbol = symbol_short!("br_pause");
+pub const BRIDGE_UNPAUSED: Symbol = symbol_short!("br_res");
+pub const RELAYER_ADDED: Symbol = symbol_short!("rel_add");
+pub const RELAYER_REMOVED: Symbol = symbol_short!("rel_rem");
+pub const BRIDGE_TX_CONFIRMED: Symbol = symbol_short!("tx_conf");
+pub const BRIDGE_TX_FAILED: Symbol = symbol_short!("tx_fail");

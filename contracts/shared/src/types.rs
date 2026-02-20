@@ -111,3 +111,107 @@ pub struct Proposal {
     pub no_votes: u32,   // Simple vote count (1-address-1-vote)
     pub executed: bool,  // Execution status
 }
+
+// ==================== Cross-Chain Bridge Types ====================
+
+/// Supported blockchain networks
+#[contracttype]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[repr(u32)]
+pub enum ChainId {
+    Ethereum = 1,
+    Polygon = 137,
+    BinanceSmartChain = 56,
+    Avalanche = 43114,
+    Arbitrum = 42161,
+    Optimism = 10,
+    Base = 8453,
+}
+
+/// Bridge transaction status
+#[contracttype]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[repr(u32)]
+pub enum BridgeTransactionStatus {
+    Pending = 0,
+    Confirmed = 1,
+    Executed = 2,
+    Failed = 3,
+    Refunded = 4,
+}
+
+/// Bridge operation type
+#[contracttype]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[repr(u32)]
+pub enum BridgeOperationType {
+    Deposit = 0,  // Lock assets on source chain, mint on Stellar
+    Withdraw = 1, // Burn on Stellar, release on destination chain
+}
+
+/// Supported chain configuration
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct ChainConfig {
+    pub chain_id: ChainId,
+    pub name: String,
+    pub bridge_contract_address: BytesN<32>, // Remote bridge contract address
+    pub confirmations_required: u32,
+    pub is_active: bool,
+    pub gas_cost_estimate: u64, // Estimated gas cost for operations
+}
+
+/// Wrapped asset information
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct WrappedAssetInfo {
+    pub asset_code: String,
+    pub issuer: Address,
+    pub original_chain: ChainId,
+    pub original_contract: BytesN<32>, // Original contract address on source chain
+    pub decimals: u32,
+    pub is_active: bool,
+    pub total_wrapped: Amount,
+}
+
+/// Bridge transaction record
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct BridgeTransaction {
+    pub tx_id: u64,
+    pub source_chain: ChainId,
+    pub destination_chain: ChainId,
+    pub operation: BridgeOperationType,
+    pub sender: BytesN<32>, // Address on source chain (32 bytes for compatibility)
+    pub recipient: Address, // Stellar address for deposits
+    pub asset: Address,     // Wrapped asset address on Stellar
+    pub amount: Amount,
+    pub status: BridgeTransactionStatus,
+    pub confirmations: u32,
+    pub created_at: Timestamp,
+    pub updated_at: Timestamp,
+    pub source_tx_hash: BytesN<32>, // Transaction hash on source chain
+}
+
+/// Relayer information
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct RelayerInfo {
+    pub address: Address,
+    pub stake_amount: Amount,
+    pub is_active: bool,
+    pub successful_txs: u64,
+    pub failed_txs: u64,
+}
+
+/// Bridge configuration
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct BridgeConfig {
+    pub admin: Address,
+    pub paused: bool,
+    pub min_relayer_stake: Amount,
+    pub confirmation_threshold: u32,
+    pub max_gas_price: u64,
+    pub emergency_pause_threshold: u32,
+}
