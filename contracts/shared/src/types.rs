@@ -98,7 +98,7 @@ pub enum VoteOption {
     No = 2,
 }
 
-/// Governance proposal structure (MVP)
+/// Governance proposal structure (token-weighted voting)
 #[contracttype]
 #[derive(Clone, Debug)]
 pub struct Proposal {
@@ -107,9 +107,9 @@ pub struct Proposal {
     pub payload_ref: soroban_sdk::Bytes, // Reference to proposal details (e.g., IPFS hash, JSON pointer)
     pub start_time: Timestamp,
     pub end_time: Timestamp,
-    pub yes_votes: u32,  // Simple vote count (1-address-1-vote)
-    pub no_votes: u32,   // Simple vote count (1-address-1-vote)
-    pub executed: bool,  // Execution status
+    pub yes_votes: Amount, // Token-weighted yes votes
+    pub no_votes: Amount,  // Token-weighted no votes
+    pub executed: bool,    // Execution status
 }
 
 // ==================== Cross-Chain Bridge Types ====================

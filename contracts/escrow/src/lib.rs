@@ -235,11 +235,7 @@ impl EscrowContract {
 
         // Get escrow
         let mut escrow = get_escrow(&env, project_id)?;
-
-        // Verify voter is a validator
-        if !escrow.validators.iter().any(|v| v == voter) {
-            return Err(Error::NotAValidator);
-        }
+        validation::validate_validator(&escrow, &voter)?;
 
         // Get milestone
         let mut milestone = get_milestone(&env, project_id, milestone_id)?;
