@@ -29,7 +29,9 @@ export function LiveNotificationToast() {
       gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
       osc.start(ctx.currentTime);
       osc.stop(ctx.currentTime + 0.15);
-      return () => ctx.close();
+      return () => {
+        void ctx.close();
+      };
     } catch {
       // Ignore if AudioContext not supported
     }

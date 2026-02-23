@@ -65,7 +65,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
         setNotifications((prev) => {
           const byId = new Map(prev.map((n) => [n.id, n]));
           data.forEach((n) => byId.set(n.id, { ...n, read: byId.get(n.id)?.read ?? n.read }));
-          return [...byId.values()].sort(
+          return Array.from(byId.values()).sort(
             (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           );
         });
