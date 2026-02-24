@@ -121,7 +121,7 @@ impl ProjectLaunch {
         let current_time = env.ledger().timestamp();
         let duration = deadline.saturating_sub(current_time);
 
-        if duration < MIN_PROJECT_DURATION || duration > MAX_PROJECT_DURATION {
+        if !(MIN_PROJECT_DURATION..=MAX_PROJECT_DURATION).contains(&duration) {
             return Err(Error::InvalidDeadline);
         }
 

@@ -85,7 +85,7 @@ impl GovernanceContract {
     ) -> Result<(), Error> {
         admin.require_auth();
 
-        if recipients.len() != amounts.len() || recipients.len() == 0 {
+        if recipients.len() != amounts.len() || recipients.is_empty() {
             return Err(Error::InvalidInput);
         }
 
@@ -189,7 +189,7 @@ impl GovernanceContract {
         if start_time < current_time {
             return Err(Error::InvalidInput);
         }
-        if payload_ref.len() == 0 {
+        if payload_ref.is_empty() {
             return Err(Error::InvalidInput);
         }
 
@@ -319,11 +319,7 @@ impl GovernanceContract {
             }
         }
 
-        if proposal.yes_votes > proposal.no_votes {
-            proposal.executed = true;
-        } else {
-            proposal.executed = false;
-        }
+        proposal.executed = proposal.yes_votes > proposal.no_votes;
 
         // Record optional timelock for this proposal
         let timelock_delay: u64 = storage.get(&DataKey::TimelockDelay).unwrap_or(0);

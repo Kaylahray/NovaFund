@@ -17,10 +17,7 @@ fn test_verification_flow() {
 
     client.initialize(&admin);
 
-    assert_eq!(
-        client.is_verified(&user, &Jurisdiction::UnitedStates),
-        false
-    );
+    assert!(!client.is_verified(&user, &Jurisdiction::UnitedStates));
 
     // Simulate valid proof (mocked to just non-empty bytes)
     let proof = Bytes::from_slice(&env, &[1, 2, 3]);
@@ -28,12 +25,9 @@ fn test_verification_flow() {
 
     client.verify_identity(&user, &Jurisdiction::UnitedStates, &proof, &public_inputs);
 
-    assert_eq!(client.is_verified(&user, &Jurisdiction::UnitedStates), true);
+    assert!(client.is_verified(&user, &Jurisdiction::UnitedStates));
 
     // Test revocation
     client.revoke_verification(&user, &Jurisdiction::UnitedStates);
-    assert_eq!(
-        client.is_verified(&user, &Jurisdiction::UnitedStates),
-        false
-    );
+    assert!(!client.is_verified(&user, &Jurisdiction::UnitedStates));
 }

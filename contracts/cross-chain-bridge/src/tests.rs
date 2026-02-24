@@ -178,7 +178,7 @@ fn test_deposit() {
 
     let original_contract = BytesN::<32>::from_array(&env, &[2u8; 32]);
 
-    let (token_client, _token_admin) = create_token_contract(&env, &client.address);
+    let (token_client, token_admin) = create_token_contract(&env, &client.address);
     let issuer = token_client.address.clone();
 
     let _asset = client.mock_all_auths().register_wrapped_asset(
@@ -235,7 +235,7 @@ fn test_deposit_paused_bridge() {
 
     let original_contract = BytesN::<32>::from_array(&env, &[2u8; 32]);
 
-    let (token_client, _token_admin) = create_token_contract(&env, &client.address);
+    let (token_client, token_admin) = create_token_contract(&env, &client.address);
     let issuer = token_client.address.clone();
 
     let _asset = client.mock_all_auths().register_wrapped_asset(
